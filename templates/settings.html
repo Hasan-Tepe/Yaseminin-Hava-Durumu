@@ -50,10 +50,6 @@
         <div class="glass-card rounded-3xl p-6 shadow-soft">
             <h3 class="text-lg font-semibold text-wine-800 mb-4 pb-2 border-b border-wine-100">Kayıtlı Konumlar (Varsayılanı Seçin)</h3>
             
-            <form id="default-loc-form" action="{{ url_for('settings_page') }}" method="POST" class="space-y-3 mb-4">
-                <input type="hidden" name="user_name" value="{{ settings.user_name if settings else '' }}">
-                <input type="hidden" name="api_key" value="{{ settings.api_key if settings else '' }}">
-                
                 {% for loc in locations %}
                 <div class="flex items-center justify-between glass-card rounded-xl p-3">
                     <div class="flex items-center space-x-3">
@@ -67,7 +63,7 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <label class="flex items-center space-x-2 cursor-pointer group">
-                            <input type="radio" name="default_location" value="{{ loc.id }}" {% if loc.is_default %}checked{% endif %} onchange="document.getElementById('default-loc-form').submit();" class="hidden peer">
+                            <input type="radio" name="default_location" value="{{ loc.id }}" form="settings-form" {% if loc.is_default %}checked{% endif %} onchange="document.getElementById('settings-form').submit();" class="hidden peer">
                             <div class="w-5 h-5 rounded-full border-2 border-wine-300 peer-checked:border-white peer-checked:bg-white relative flex items-center justify-center transition-colors">
                                 <div class="w-2 h-2 rounded-full bg-wine-600 opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                             </div>
