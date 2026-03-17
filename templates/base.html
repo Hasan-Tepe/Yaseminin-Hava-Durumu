@@ -53,8 +53,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!-- PWA Settings -->
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon.svg') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}?v=3">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}?v=3">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon.svg') }}?v=3">
+    <!-- iOS için PNG veya yüksek uyumluluk Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}?v=3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#800020">
 </head>
 <body class="bg-gradient-to-br from-wine-900 via-wine-800 to-wine-950 min-h-screen text-wine-50 antialiased selection:bg-wine-400 selection:text-white flex flex-col relative overflow-x-hidden">

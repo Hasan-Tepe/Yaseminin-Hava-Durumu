@@ -31,7 +31,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             alias TEXT NOT NULL,
             city_name TEXT NOT NULL,
-            is_default BOOLEAN NOT NULL CHECK (is_default IN (0, 1))
+            is_default BOOLEAN NOT NULL CHECK (is_default IN (0, 1)),
+            image_type TEXT DEFAULT 'location_heart'
         )
     ''')
 
@@ -51,8 +52,8 @@ def init_db():
         
     cursor.execute('SELECT COUNT(*) FROM locations')
     if cursor.fetchone()[0] == 0:
-        cursor.execute('INSERT INTO locations (alias, city_name, is_default) VALUES (?, ?, ?)', ("Konya - Okul", "Meram, TR", 1))
-        cursor.execute('INSERT INTO locations (alias, city_name, is_default) VALUES (?, ?, ?)', ("İstanbul - Ev", "Sultangazi, TR", 0))
+        cursor.execute('INSERT INTO locations (alias, city_name, is_default, image_type) VALUES (?, ?, ?, ?)', ("Yasemin'in Evi 💕", "Konya, TR", 1, "location_heart"))
+        cursor.execute('INSERT INTO locations (alias, city_name, is_default, image_type) VALUES (?, ?, ?, ?)', ("Okul/İş", "Meram, TR", 0, "location_school"))
 
     conn.commit()
     conn.close()
