@@ -1,0 +1,17 @@
+{
+  "name": "Hava Durumu Asistanı",
+  "short_name": "Asistanım",
+  "description": "Günlük hava durumu ve kişisel asistan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#800020",
+  "theme_color": "#800020",
+  "icons": [
+    {
+      "src": "/static/img/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

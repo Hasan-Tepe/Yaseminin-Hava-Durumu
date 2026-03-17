@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!-- Bordo Arka Plan -->
+    <rect width="512" height="512" rx="128" fill="#800020"/>
+    <!-- İnce altın/beyaz iç çerçeve -->
+    <rect x="32" y="32" width="448" height="448" rx="96" fill="none" stroke="#F5F5DC" stroke-width="12" stroke-opacity="0.5"/>
+    <!-- H ve Y Harfleri -->
+    <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="200" font-weight="bold" fill="#F5F5DC" text-anchor="middle" dominant-baseline="central" letter-spacing="-10">HY</text>
+    <!-- Küçük kalp detayı -->
+    <path d="M 256 420 C 256 420 200 380 200 340 C 200 310 230 310 256 340 C 282 310 312 310 312 340 C 312 380 256 420 256 420 Z" fill="#FFB6C1" opacity="0.8"/>
+</svg>

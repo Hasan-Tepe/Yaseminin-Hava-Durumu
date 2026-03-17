@@ -1,0 +1,126 @@
+/* Base styles and micro animations */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Glassmorphism effect for cards (Updated for dark theme) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 10, 13, 0.37);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulse-slow {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 5s ease-in-out infinite;
+}
+
+/* Transition utility classes */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+/* Hiding scrollbar for horizontal scrolling lists */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* WEATHER ANIMATIONS */
+/* Rain */
+.rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.4));
+    animation: rain linear infinite;
+}
+
+@keyframes rain {
+    0% { transform: translateY(-120px) scaleY(1); opacity: 1; }
+    80% { transform: translateY(100vh) scaleY(0.8); opacity: 0.5; }
+    100% { transform: translateY(100vh) scaleY(0); opacity: 0; }
+}
+
+/* Snow */
+.snowflake {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: snow linear infinite;
+}
+
+@keyframes snow {
+    0% { transform: translateY(-10px) translateX(0) scale(0.5); opacity: 0; }
+    20% { opacity: 0.8; }
+    50% { transform: translateY(50vh) translateX(20px) scale(1); }
+    100% { transform: translateY(100vh) translateX(-20px) scale(0.5); opacity: 0; }
+}
+
+/* Sun Rays & Orb */
+.sun-orb {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 20%, rgba(255, 140, 0, 0.5) 60%, transparent 80%);
+    border-radius: 50%;
+    filter: blur(8px);
+    animation: pulse-slow 4s infinite;
+    z-index: 1;
+}
+
+.sun-ray {
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-conic-gradient(from 0deg, rgba(255, 235, 160, 0.15) 0deg 15deg, transparent 15deg 30deg);
+    animation: rotateSun 40s linear infinite;
+    mix-blend-mode: overlay;
+    z-index: 0;
+}
+
+@keyframes rotateSun {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

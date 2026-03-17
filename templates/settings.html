@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="space-y-6 pb-12">
+    
+    <!-- Header -->
+    <div class="flex items-center space-x-4 mb-6">
+        <a href="{{ url_for('index') }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-wine-600 shadow-soft hover:bg-wine-50 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+        </a>
+        <h2 class="text-2xl font-bold text-wine-900">Ayarlar</h2>
+    </div>
+
+        <!-- General Settings -->
+        <div class="glass-card rounded-3xl p-6 shadow-soft">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-wine-100">
+                <h3 class="text-lg font-semibold text-wine-800">Kişisel Ayarlar</h3>
+                <button type="submit" form="settings-form" class="bg-wine-600 hover:bg-wine-700 text-white font-medium py-2 px-4 rounded-xl shadow-soft hover:shadow-glow transition-all text-sm">
+                    Kaydet
+                </button>
+            </div>
+            
+            <form id="settings-form" action="{{ url_for('settings_page') }}" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-wine-700 mb-1">Hitap Edilecek İsim</label>
+                    <input type="text" name="user_name" value="{{ settings.user_name if settings else '' }}" placeholder="Örn: Bitanem" required
+                        class="w-full bg-white border border-wine-200 rounded-xl px-4 py-3 text-wine-900 outline-none focus:ring-2 focus:ring-wine-400 focus:border-transparent transition-all shadow-inner">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-wine-700 mb-1">OpenWeatherMap API Key</label>
+                    <input type="text" name="api_key" value="{{ settings.api_key if settings else '' }}" placeholder="API Anahtarınızı girin..."
+                        class="w-full bg-white border border-wine-200 rounded-xl px-4 py-3 text-wine-900 outline-none focus:ring-2 focus:ring-wine-400 focus:border-transparent transition-all shadow-inner">
+                    <p class="text-xs text-wine-400 mt-2">Hava durumu verilerini alabilmek için gerekli.</p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-wine-100">
+                    <h4 class="text-sm font-medium text-wine-800 mb-3">Yeni Konum Ekle</h4>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <input type="text" name="new_loc_alias" placeholder="Başlık (Okul vs.)" class="w-full bg-white border border-wine-200 rounded-lg px-3 py-2 text-sm text-wine-900 outline-none focus:ring-2 focus:ring-wine-400 focus:border-transparent">
+                        <input type="text" name="new_loc_city" placeholder="Şehir/Semt adı (Örn: Konya, TR)" class="w-full bg-white border border-wine-200 rounded-lg px-3 py-2 text-sm text-wine-900 outline-none focus:ring-2 focus:ring-wine-400 focus:border-transparent">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Locations Settings -->
+        <div class="glass-card rounded-3xl p-6 shadow-soft">
+            <h3 class="text-lg font-semibold text-wine-800 mb-4 pb-2 border-b border-wine-100">Kayıtlı Konumlar (Varsayılanı Seçin)</h3>
+            
+            <form id="default-loc-form" action="{{ url_for('settings_page') }}" method="POST" class="space-y-3 mb-4">
+                <input type="hidden" name="user_name" value="{{ settings.user_name if settings else '' }}">
+                <input type="hidden" name="api_key" value="{{ settings.api_key if settings else '' }}">
+                
+                {% for loc in locations %}
+                <div class="flex items-center justify-between glass-card rounded-xl p-3">
+                    <div class="flex items-center space-x-3">
+                        {% if loc.image_type %}
+                        <img src="{{ url_for('static', filename='img/' + loc.image_type + '.png') }}" class="w-10 h-10 rounded-lg bg-white/20 p-1">
+                        {% endif %}
+                        <div>
+                            <p class="font-medium text-white truncate">{{ loc.alias }}</p>
+                            <p class="text-xs text-wine-200">{{ loc.city_name }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center space-x-2 cursor-pointer group">
+                            <input type="radio" name="default_location" value="{{ loc.id }}" {% if loc.is_default %}checked{% endif %} onchange="document.getElementById('default-loc-form').submit();" class="hidden peer">
+                            <div class="w-5 h-5 rounded-full border-2 border-wine-300 peer-checked:border-white peer-checked:bg-white relative flex items-center justify-center transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-wine-600 opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                            </div>
+                            <span class="text-xs text-wine-100 font-medium group-hover:text-white transition-colors">Varsayılan</span>
+                        </label>
+                        
+                        <form action="{{ url_for('delete_location', loc_id=loc.id) }}" method="POST" class="inline" onsubmit="return confirm('Bu konumu silmek istediğinize emin misiniz?');">
+                            <button type="submit" class="text-wine-300 hover:text-red-400 focus:outline-none transition-colors w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full" title="Konumu Sil">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+
+</div>
+{% endblock %}

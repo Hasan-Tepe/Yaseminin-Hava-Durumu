@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="space-y-6">
+    
+    <!-- Greeting Section -->
+    <div class="glass-card rounded-3xl p-6 shadow-soft hover-lift relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-wine-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow"></div>
+        <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-20 h-20 bg-blush-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow font-delay-2000"></div>
+        
+        <h2 class="text-3xl font-bold text-white relative z-10 shadow-sm drop-shadow-md">Günaydın, <span class="text-wine-200">{{ settings.user_name if settings else 'Canım' }}</span> ✨</h2>
+        <p class="text-wine-100 mt-2 font-medium relative z-10">{{ current_date }}</p>
+    </div>
+
+    <!-- Special Message Alert (If any) -->
+    {% if special_message %}
+    <div class="bg-gradient-to-r from-wine-600 to-wine-400 rounded-3xl p-5 text-white shadow-soft relative overflow-hidden group">
+        <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+        <div class="flex items-center space-x-3 relative z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-wine-100 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+            </svg>
+            <div>
+                <h3 class="font-bold text-lg">Özel Bir Gün!</h3>
+                <p class="text-wine-50 text-sm mt-1">{{ special_message }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Weather Card -->
+    {% if weather %}
+    <div class="bg-white rounded-3xl p-6 shadow-glow border border-wine-100 text-center relative overflow-hidden">
+        <div class="flex flex-col items-center justify-center mb-2 relative z-10 w-full">
+            <div class="flex items-center justify-center">
+                <p class="text-wine-500 font-bold tracking-wide uppercase text-sm flex items-center justify-center">
+                    <i class="fas fa-map-marker-alt mr-1"></i> {{ location_name }}
+                </p>
+                <button onclick="document.getElementById('addLocationModal').classList.remove('hidden')" class="ml-2 w-7 h-7 rounded-full bg-wine-50 text-wine-600 flex items-center justify-center shadow-sm hover:bg-wine-100 hover:scale-110 transition-all cursor-pointer border border-wine-200" title="Yeni Konum Ekle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="flex flex-col items-center justify-center relative z-10">
+            <!-- Dynamic Location Graphic -->
+            {% if default_loc and default_loc.image_type %}
+                <img src="{{ url_for('static', filename='img/' + default_loc.image_type + '.png') }}" alt="Location" class="w-40 h-40 drop-shadow-2xl transform hover:scale-105 transition-transform duration-500 my-2">
+            {% else %}
+                <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@4x.png" alt="Weather icon" class="w-40 h-40 drop-shadow-2xl transform hover:scale-110 transition-transform duration-300">
+            {% endif %}
+            
+            <h1 class="text-6xl font-bold text-wine-900 tracking-tighter mt-2">{{ weather.temp|round|int }}°</h1>
+            <div class="flex items-center justify-center mt-2 space-x-2">
+                <img src="http://openweathermap.org/img/wn/{{ weather.icon }}.png" alt="Weather small" class="w-10 h-10 filter drop-shadow">
+                <p class="text-xl text-wine-700 capitalize font-semibold">{{ weather.description }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-wine-50 relative z-10">
+            <div class="flex items-center justify-center space-x-2 text-wine-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="text-left leading-tight">
+                    <span class="block text-xs uppercase text-wine-400 font-bold tracking-wider">Nem</span>
+                    <span class="font-semibold text-lg">%{{ weather.humidity }}</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-center space-x-2 text-wine-600 border-l border-wine-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+                <div class="text-left leading-tight">
+                    <span class="block text-xs uppercase text-wine-400 font-bold tracking-wider">Rüzgar</span>
+                    <span class="font-semibold text-lg">{{ weather.wind_speed }} km/s</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI/Smart Advice Card -->
+    <div class="glass-card rounded-3xl p-5 shadow-soft border border-blush-200 mt-6 relative hover-lift">
+        <div class="flex items-start space-x-4">
+            <div class="bg-wine-100 text-wine-600 rounded-2xl p-3 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+            </div>
+            <div class="pt-1 w-full">
+                <h4 class="text-white font-bold mb-1">Küçük Bir Tavsiye</h4>
+                <p class="text-wine-100 text-sm leading-relaxed whitespace-pre-wrap">{{ advice_message }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hourly Forecast (Horizontal Scroll) -->
+    {% if hourly_forecast %}
+    <div class="glass-card rounded-3xl p-5 shadow-soft hover-lift mt-6">
+        <h3 class="text-sm font-semibold text-wine-800 mb-2 ml-1">Saatlik Görünüm</h3>
+        <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
+            {% for h in hourly_forecast %}
+            <div class="flex flex-col items-center justify-center w-16 shrink-0 bg-white/50 rounded-2xl py-2 border border-wine-50">
+                <span class="text-xs text-wine-600 font-medium mb-1">{{ h.time }}</span>
+                <img src="http://openweathermap.org/img/wn/{{ h.icon }}@2x.png" class="w-10 h-10 drop-shadow-sm">
+                <span class="text-sm font-bold text-wine-900 mt-1">{{ h.temp }}°</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Daily Forecast (Vertical List) -->
+    {% if daily_forecast %}
+    <div class="glass-card rounded-3xl p-5 shadow-soft hover-lift mt-6">
+        <h3 class="text-sm font-semibold text-wine-800 mb-3 ml-1">Önümüzdeki Günler</h3>
+        <div class="space-y-3">
+            {% for d in daily_forecast %}
+            <div class="flex items-center justify-between bg-white/60 rounded-xl p-3 border border-wine-50 transition-colors hover:bg-white">
+                <span class="text-wine-800 font-medium w-24">{{ d.day }}</span>
+                <div class="flex items-center space-x-2 flex-grow justify-center">
+                    <img src="http://openweathermap.org/img/wn/{{ d.icon }}.png" class="w-8 h-8 drop-shadow-sm">
+                    <span class="text-xs text-wine-500 capitalize hidden sm:inline-block">{{ d.desc }}</span>
+                </div>
+                <span class="text-wine-900 font-bold w-12 text-right">{{ d.temp }}°</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <!-- No API Key or Error State -->
+    <div class="glass-card rounded-3xl p-8 text-center shadow-soft border-wine-200 border-2 border-dashed">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-wine-100 text-wine-500 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        <h3 class="text-xl font-bold text-wine-900 mb-2">Hava Durumu Alınamadı</h3>
+        <p class="text-wine-600 text-sm">Lütfen ayarlardan geçerli bir OpenWeatherMap API anahtarı ekleyin.</p>
+        <a href="{{ url_for('settings_page') }}" class="mt-6 inline-block bg-wine-600 text-white font-medium py-2 px-6 rounded-full shadow-lg hover:bg-wine-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">Ayarlara Git</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Add Location Modal -->
+<div id="addLocationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity px-4">
+    <div class="bg-gradient-to-br from-wine-800 to-wine-900 rounded-3xl p-6 w-full max-w-sm shadow-2xl transform scale-100 border border-wine-600">
+        <h3 class="text-xl font-bold text-white mb-4 text-center">Yeni Konum Ekle</h3>
+        <form action="{{ url_for('add_location') }}" method="POST" class="space-y-4">
+            <div>
+                <input type="text" name="new_loc_alias" placeholder="Başlık (Örn: Ev, Okul)" required class="w-full bg-white/10 border border-wine-600 rounded-xl px-4 py-3 text-white placeholder-wine-300 outline-none focus:ring-2 focus:ring-wine-400">
+            </div>
+            <div>
+                <input type="text" name="new_loc_city" placeholder="Şehir/Semt adı (Örn: İstanbul)" required class="w-full bg-white/10 border border-wine-600 rounded-xl px-4 py-3 text-white placeholder-wine-300 outline-none focus:ring-2 focus:ring-wine-400">
+            </div>
+            
+            <div class="space-y-2 mt-2">
+                <label class="block text-sm font-medium text-wine-200">Konum Görseli</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="image_type" value="location_home" checked class="peer hidden">
+                        <div class="rounded-xl border-2 border-transparent peer-checked:border-wine-300 peer-checked:bg-white/20 p-2 text-center transition-all bg-white/5 hover:bg-white/10">
+                            <img src="{{ url_for('static', filename='img/location_home.png') }}" class="w-12 h-12 mx-auto rounded-lg mb-1">
+                            <span class="text-xs text-wine-100">Ev</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="image_type" value="location_school" class="peer hidden">
+                        <div class="rounded-xl border-2 border-transparent peer-checked:border-wine-300 peer-checked:bg-white/20 p-2 text-center transition-all bg-white/5 hover:bg-white/10">
+                            <img src="{{ url_for('static', filename='img/location_school.png') }}" class="w-12 h-12 mx-auto rounded-lg mb-1">
+                            <span class="text-xs text-wine-100">Okul/İş</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="image_type" value="location_heart" class="peer hidden">
+                        <div class="rounded-xl border-2 border-transparent peer-checked:border-wine-300 peer-checked:bg-white/20 p-2 text-center transition-all bg-white/5 hover:bg-white/10">
+                            <img src="{{ url_for('static', filename='img/location_heart.png') }}" class="w-12 h-12 mx-auto rounded-lg mb-1">
+                            <span class="text-xs text-wine-100">Özel</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex space-x-3 mt-6 pt-2">
+                <button type="button" onclick="document.getElementById('addLocationModal').classList.add('hidden')" class="w-1/2 py-3 rounded-xl border border-wine-600 text-wine-200 font-semibold hover:bg-white/10 transition-colors">İptal</button>
+                <button type="submit" class="w-1/2 bg-white text-wine-900 py-3 rounded-xl font-bold shadow-glow hover:bg-wine-100 transition-colors">Ekle</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
